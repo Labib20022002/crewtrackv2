@@ -1,13 +1,14 @@
-## LearnToday
+## CrewTrack
 
-Welcome to LearnToday, a comprehensive platform designed for students, teachers, and administrators to manage classes, assignments, and progress effectively.
+Welcome to CrewTrack, a modern employee management platform designed to streamline workforce operations, role-based access, attendance, and team productivity efficiently.
 
 
 
 
 ### 🖼️ Website
 
-<img width="1729" height="861" alt="586579947-e5bfbf12-c665-4e3b-a939-f2c73275ed2fv2" src="https://github.com/user-attachments/assets/0bff3a05-3766-4997-b757-d3a8311b9d6a" />
+<img width="1920" height="1605" alt="image" src="https://github.com/user-attachments/assets/58a41908-60da-4bd5-aa1c-6df6c2ffd411" />
+
 
 
 
@@ -16,4 +17,4 @@ Welcome to LearnToday, a comprehensive platform designed for students, teachers,
 
 ### 🖥️ Live Site URL
 
-https://learntoday02.netlify.app/
+https://crew-track.netlify.app/
