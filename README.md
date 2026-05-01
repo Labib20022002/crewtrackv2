@@ -1,20 +1,19 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+## LearnToday
 
-# Run and deploy your AI Studio app
-
-This contains everything you need to run your app locally.
-
-View your app in AI Studio: https://ai.studio/apps/e4a68058-939c-42c5-a46a-e9c26ce75b7e
-
-## Run Locally
-
-**Prerequisites:**  Node.js
+Welcome to LearnToday, a comprehensive platform designed for students, teachers, and administrators to manage classes, assignments, and progress effectively.
 
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+
+
+### 🖼️ Website
+
+<img width="1729" height="861" alt="586579947-e5bfbf12-c665-4e3b-a939-f2c73275ed2fv2" src="https://github.com/user-attachments/assets/0bff3a05-3766-4997-b757-d3a8311b9d6a" />
+
+
+
+
+
+
+### 🖥️ Live Site URL
+
+https://learntoday02.netlify.app/
