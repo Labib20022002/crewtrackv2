@@ -1,0 +1,105 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Global Helpers
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerified() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function getUserData() {
+      let path = /databases/$(database)/documents/users/$(request.auth.uid);
+      return exists(path) ? get(path).data : null;
+    }
+
+    function isAdmin() {
+      let data = getUserData();
+      return isSignedIn() && data != null && data.role == 'admin';
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // --- Entity Validations ---
+
+    function isValidEmployee(data) {
+      return data.keys().hasAll(['firstName', 'lastName', 'email', 'department', 'position', 'salary', 'hireDate', 'status'])
+        && data.firstName is string && data.firstName.size() <= 100
+        && data.lastName is string && data.lastName.size() <= 100
+        && data.email is string && data.email.size() <= 150
+        && data.department is string && data.department.size() <= 100
+        && data.status in ['active', 'on-leave', 'terminated'];
+    }
+
+    function isValidActivityLog(data) {
+      return data.keys().hasAll(['actionType', 'entityId', 'entityType', 'description', 'userId', 'userName', 'timestamp'])
+        && data.actionType in ['CREATE', 'UPDATE', 'DELETE']
+        && data.userId == request.auth.uid
+        && data.description is string && data.description.size() <= 500;
+    }
+
+    // --- Collection Matches ---
+
+    match /users/{userId} {
+      allow read: if isSignedIn() && (request.auth.uid == userId || isAdmin());
+      allow create: if isSignedIn() && request.auth.uid == userId;
+      allow update: if isSignedIn() && request.auth.uid == userId && incoming().role == existing().role; // Prevent self-promoting to admin
+      allow delete: if false;
+    }
+
+    match /employees/{employeeId} {
+      allow get: if isSignedIn();
+      allow list: if isSignedIn();
+      
+      allow create: if isVerified() && isAdmin()
+        && isValidId(employeeId)
+        && isValidEmployee(incoming())
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+
+      allow update: if isVerified() && isAdmin()
+        && isValidId(employeeId)
+        && isValidEmployee(incoming())
+        && (
+          // Action: Generic Update
+          incoming().diff(existing()).affectedKeys().hasOnly([
+            'firstName', 'lastName', 'email', 'phone', 'department', 
+            'position', 'salary', 'hireDate', 'status', 'photoUrl', 'bio', 'updatedAt'
+          ])
+          && incoming().updatedAt == request.time
+          && incoming().createdAt == existing().createdAt
+        );
+
+      allow delete: if isVerified() && isAdmin() && isValidId(employeeId);
+    }
+
+    match /activity_logs/{logId} {
+      allow get: if isAdmin();
+      allow list: if isAdmin();
+
+      allow create: if isVerified() && isAdmin()
+        && isValidId(logId)
+        && isValidActivityLog(incoming())
+        && incoming().timestamp == request.time;
+      
+      allow update, delete: if false; // Logs are immutable
+    }
+  }
+}

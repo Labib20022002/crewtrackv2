@@ -1,0 +1,66 @@
+{
+  "entities": {
+    "Employee": {
+      "title": "Employee",
+      "description": "Information about a company employee.",
+      "type": "object",
+      "properties": {
+        "firstName": { "type": "string", "description": "Employee's first name." },
+        "lastName": { "type": "string", "description": "Employee's last name." },
+        "email": { "type": "string", "format": "email", "description": "Employee's email address." },
+        "phone": { "type": "string", "description": "Employee's phone number." },
+        "department": { "type": "string", "description": "Department the employee belongs to." },
+        "position": { "type": "string", "description": "Job title/position." },
+        "salary": { "type": "number", "description": "Annual salary." },
+        "hireDate": { "type": "string", "format": "date-time", "description": "Date the employee was hired." },
+        "status": { "type": "string", "enum": ["active", "on-leave", "terminated"], "description": "Current employment status." },
+        "photoUrl": { "type": "string", "description": "URL to the employee's photo." },
+        "bio": { "type": "string", "description": "Short biography." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp." },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Last update timestamp." }
+      },
+      "required": ["firstName", "lastName", "email", "department", "position", "salary", "hireDate", "status"]
+    },
+    "ActivityLog": {
+      "title": "Activity Log",
+      "description": "A log of administrative actions performed in the system.",
+      "type": "object",
+      "properties": {
+        "actionType": { "type": "string", "enum": ["CREATE", "UPDATE", "DELETE"], "description": "Type of action performed." },
+        "entityId": { "type": "string", "description": "ID of the affected entity." },
+        "entityType": { "type": "string", "description": "Type of the affected entity (e.g., Employee)." },
+        "description": { "type": "string", "description": "Human-readable description of the action." },
+        "userId": { "type": "string", "description": "UID of the user who performed the action." },
+        "userName": { "type": "string", "description": "Display name of the user." },
+        "timestamp": { "type": "string", "format": "date-time", "description": "When the action occurred." }
+      },
+      "required": ["actionType", "entityId", "entityType", "description", "userId", "userName", "timestamp"]
+    },
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "System user information and roles.",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string", "format": "email" },
+        "displayName": { "type": "string" },
+        "role": { "type": "string", "enum": ["admin", "viewer"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["email", "role"]
+    }
+  },
+  "firestore": {
+    "employees": {
+      "schema": "Employee",
+      "description": "Collection of employee records."
+    },
+    "activity_logs": {
+      "schema": "ActivityLog",
+      "description": "Audit trail of system activities."
+    },
+    "users": {
+      "schema": "UserProfile",
+      "description": "System users and permissions."
+    }
+  }
+}

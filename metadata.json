@@ -1,0 +1,6 @@
+{
+  "name": "CrewTrack - Employee Management",
+  "description": "A modern, high-performance Employee Management System with RBAC functionality.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": []
+}
